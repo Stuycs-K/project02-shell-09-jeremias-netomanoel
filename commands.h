@@ -1,4 +1,4 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
-void interpreter(char ** args, char * path, char * out);
+char * interpreter(char ** args, char * path);
 #endif

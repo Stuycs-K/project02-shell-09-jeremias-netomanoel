@@ -14,26 +14,26 @@
 
 int main(int argc, char const *argv[]) {
   char path[1000];
-  char input[255];
+  char input[1000];
   getcwd(path, sizeof(path));
   printf("WELCOME TO MANNYSHELL, THE BEST SHELL AROUND!\n");
-  printf("path: %s $ ", path);
-  while(fgets(input,255,stdin) != 0){
+  printf("path:%s$ ", path);
+  while(fgets(input,1000,stdin) != 0){
     //do everything here
     char * args[40];
     parse_args(input, args);
     char out[100];
-    printf
-    interpreter(args, path, out);
-    if (strcmp(out, "exit")==0){
-      printf("We thank you for using MANNYSHELL, goodbye!");
+    strcpy(out, interpreter(args, path));
+    if (strcmp(out, "e")==0){
+      printf("We thank you for using MANNYSHELL, goodbye!\n");
       break;
     }
-    else if (strcmp(out, "program")!=0){
+    else if (strcmp(out, "p")!=0){
       strcpy(path, out);
     }
     //reset
     printf("path: %s $ ", path);
+
   }
   return 0;
 }

@@ -5,7 +5,7 @@ shell.o: shell.c parse.h commands.h
 parse.o: parse.c parse.h
 	@gcc -c parse.c -lm
 commands.o: commands.c commands.h
-	@gcc -c commands.c commands.h
+	@gcc -c commands.c
 clean:
 	@rm *.o
 	@rm shell
