@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-
 void parseInput(char * line, char * path, char * info){
   //init stuff here
   char * input[40];
@@ -20,7 +19,8 @@ void parseInput(char * line, char * path, char * info){
       input[cntr] = out;
       cntr++;
   }
-  for (int i = 0; i < cntr; i ++){
+  printf("%d\n", cntr);
+  for (int i = 0; i < cntr; i +=1){
     in = input[i];
     char * programline[100];
     cntr = 0;
@@ -35,7 +35,24 @@ void parseInput(char * line, char * path, char * info){
     }
     else if(strcmp(programline[0], "cd") == 0){
       //cd code here
-      printf("%s\n", "cd");
+      if(cntr>2){
+        printf("MANNYSHELL: Too many arguments\n");
+        getcwd(path, sizeof(path));
+        continue;
+      }
+      else if(cntr<2){
+        chdir("/");
+        getcwd(path, sizeof(path));
+        continue;
+      }
+      else{
+        if(chdir(programline[1]) == -1){
+          printf("MANNYSHELL: No such file or directory\n");
+          getcwd(path, sizeof(path));
+          continue;
+        }
+        continue;
+      }
     }
     else{
       //execvp

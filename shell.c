@@ -11,22 +11,23 @@
 #include <dirent.h>
 #include "parse.h"
 
+
 int main(int argc, char const *argv[]) {
   char path[100];
   char input[100];
   char info[4];
   getcwd(path, sizeof(path));
-  printf("WELCOME TO MANNYSHELL, THE BEST SHELL AROUND!\n");
-  printf("path:%s$ ", path);
+  printf("WELCOME TO MANNYSHELL, THE WORST SHELL AROUND!\n");
+  printf("root:%s$ ", path);
   while(fgets(input,100,stdin) != 0){
-
     //do everything here
     parseInput(input, path, info);
-    if(strcmp(info, "e") == 0){
+    if(info != NULL && strcmp(info, "e") == 0){
       printf("Thank you for using MANNYSHELL!\n");
       break;
     }
-    printf("path:%s$ ", path);
+    getcwd(path, sizeof(path));
+    printf("root:%s$ ", path);
   }
   return 0;
 }
