@@ -1,9 +1,9 @@
-compile runme: shell.o parse.o
-	@gcc -o shell shell.o parse.o -lm
-shell.o: shell.c parse.h
+compile runme: shell.o exec.o
+	@gcc -o shell shell.o exec.o -lm
+shell.o: shell.c exec.h
 	@gcc -c shell.c -lm
-parse.o: parse.c parse.h
-	@gcc -c parse.c -lm
+exec.o: exec.c exec.h
+	@gcc -c exec.c -lm
 clean:
 	@rm *.o
 	@rm shell

@@ -9,7 +9,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include "parse.h"
+#include "exec.h"
 
 
 int main(int argc, char const *argv[]) {
@@ -22,6 +22,7 @@ int main(int argc, char const *argv[]) {
   while(fgets(input,100,stdin) != 0){
     //do everything here
     parseInput(input, path, info);
+    fflush(stdout);
     if(info != NULL && strcmp(info, "e") == 0){
       printf("Thank you for using MANNYSHELL!\n");
       break;
