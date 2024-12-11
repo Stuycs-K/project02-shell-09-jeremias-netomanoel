@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <pwd.h>
 
 void parseInput(char * line, char * path, char * info){
 
@@ -26,7 +27,11 @@ void parseInput(char * line, char * path, char * info){
 
   int tempfile = open("tempfile.txt", O_CREAT | O_TRUNC | O_RDWR);
 
+  const char *homedir;
 
+  if ((homedir = getenv("HOME")) == NULL) {
+      homedir = getpwuid(getuid())->pw_dir;
+  }
 
   //removing "/n" from line (stdin to shell) (idk why it needs to be done in this roundabout way but im pretty sure its related to const char * somehow)
   //if it isnt here i get a bad memory address error (i took me way too long to figure this out)
@@ -94,7 +99,7 @@ void parseInput(char * line, char * path, char * info){
           fflush(stdout);
         }
         else if(cntr<2){
-          chdir("/");
+          chdir(homedir);
         }
         else if(cntr == 2){
           if(chdir(programline[1]) == -1){
