@@ -22,13 +22,16 @@ void parseInput(char * line, char * path, char * info){
   int stdout2;
   int stdin2;
 
+  //setup for pipes down the line
+
   dup2(stdout2, STDOUT_FILENO);
   dup2(stdin2, STDIN_FILENO);
 
   int tempfile = open("tempfile.txt", O_CREAT | O_TRUNC | O_RDWR);
 
-  const char *homedir;
+  //setup for home directory finding
 
+  const char *homedir;
   if ((homedir = getenv("HOME")) == NULL) {
       homedir = getpwuid(getuid())->pw_dir;
   }
@@ -48,12 +51,15 @@ void parseInput(char * line, char * path, char * info){
   }
   int loop = cntr;
   int haspipe = 0;
-  //for loop to loop through input (idk how to name functions ok??)
+
+  //strsep out pipes so that i can do the stdin and stdout of the input side and the output side of the pipe
 
   for (int i = 0; i < loop; i +=1){
     char * linein = input[i];
     char * lineline[100];
     int counter = 0;
+
+//the actual strsep
 
     while (out = strsep(&linein, "|")){
       lineline[counter] = out;
@@ -62,8 +68,10 @@ void parseInput(char * line, char * path, char * info){
     if(counter == 2){
       haspipe = 1;
     }
-    //for each prompt strsep'd out, strsep again for " " to get an args array
     for(int l = 0; l < counter; l ++){
+
+      //there are 3 case: no pipe, pipe (on the left side of |) and pipe (on the right side of |)
+      //this just dup2s either stdin or out to tempfile depending on which one, or does nothing if there is no pipe
 
       if(haspipe == 1 && l == 0){
         dup2(tempfile, STDOUT_FILENO);
@@ -72,6 +80,7 @@ void parseInput(char * line, char * path, char * info){
         dup2(tempfile, STDIN_FILENO);
       }
 
+      //for each prompt strsep'd out, strsep again for " " to get an args array
 
       char * in = lineline[l];
       char * programline[100];
@@ -84,7 +93,9 @@ void parseInput(char * line, char * path, char * info){
       //set the end \0 (just in case) idk it breaks without this (but only sometimes)
 
       programline[cntr] = 0;
+
       //if it says exit, quit (thats whats break is for)
+
       if (strcmp(programline[0], "exit") == 0){
         strcpy(info, "e");
         break;
@@ -95,13 +106,16 @@ void parseInput(char * line, char * path, char * info){
       else if(strcmp(programline[0], "cd") == '\0'){
         //cd code here
         if(cntr>2){
+          //too many args
           printf("MANNYSHELL: Too many arguments\n");
           fflush(stdout);
         }
         else if(cntr<2){
+          //goes to homedirectory
           chdir(homedir);
         }
         else if(cntr == 2){
+          //tries to go to directory in cd's args, and yells at you if it doesnt exist
           if(chdir(programline[1]) == -1){
             printf("MANNYSHELL: No such file or directory\n");
             fflush(stdout);
@@ -155,6 +169,8 @@ void parseInput(char * line, char * path, char * info){
       }
     }
   }
+  //at the end, reset stdin and out just in case, as well as close tempfile
   dup2(stdin2, STDIN_FILENO);
   dup2(stdout2, STDOUT_FILENO);
+  close(tempfile);
 }

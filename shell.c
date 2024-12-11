@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]) {
   char info[4];
   getcwd(path, sizeof(path));
   printf("WELCOME TO MANNYSHELL, THE WORST SHELL AROUND!\n");
-  printf("root:%s$ ", path);
+  printf("user:%s$ ", path);
   while(fgets(input,100,stdin) != 0){
     //do everything here
     parseInput(input, path, info);
@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]) {
       break;
     }
     getcwd(path, sizeof(path));
-    printf("root:%s$ ", path);
+    printf("user:%s$ ", path);
   }
   return 0;
 }
