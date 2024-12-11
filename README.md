@@ -19,7 +19,7 @@
 
 # shell.c 
   (the main shell)
-  the one with the main in it
+  the one with the main in it that loops forever until either exit or ctrl+d happens
 
 # exec.c
   (does literally everything else)
